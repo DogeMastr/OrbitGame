@@ -20,6 +20,11 @@ blackhole blackhole1;
 
 boolean gameover = false;
 
+//Scoring stuff
+String[] scores;
+int highScore;
+
+
 public void setup(){
   
 
@@ -29,20 +34,30 @@ public void setup(){
   player1 = new player();
 
   blackhole1 = new blackhole();
+
+  scores = loadStrings("data/Scores.txt");
+  highScore = PApplet.parseInt(scores[0]);
 }
 
 public void draw(){
   background(0,0,85);
 
   if(gameover == true){
+    //you died
+    if(player1.orbits > highScore){
+      highScore = player1.orbits;
+    }
 
+    text("Gameover!",width/2,height/3);
+    text("Score: "+player1.orbits,width/2,height/2);
+    text("Highscore: " + highScore,width/2,(height/3)*2);
   } else {
 
-  player1.run();
+    player1.run();
 
-  blackhole1.run();
+    blackhole1.run();
 
-  checkGameover();
+    checkGameover();
 
   }
 }
@@ -52,6 +67,14 @@ public void checkGameover(){
     gameover = true;
   }
 }
+
+public void exit() {
+  println(highScore);
+  scores[0] = str(highScore);
+  println(scores[0]);
+  saveStrings("data/Scores.txt",scores);
+  super.exit();
+}
 class blackhole{
   float x;
   float y;
@@ -60,7 +83,7 @@ class blackhole{
   blackhole(){
     x = width/2;
     y = width/2;
-    radius = 20;
+    radius = 10;
 
     println("init: " + this);
   }
@@ -85,6 +108,7 @@ class player{
   float orbitRadius;
 
   int orbits; //score
+  boolean scorecounting;
   player(){
     centerX = width/2;
     centerY = height/2;
@@ -118,11 +142,20 @@ class player{
 
   public void display(){
     fill(255);
-    ellipse(x,y,10,10);
+    ellipse(x,y,radius,radius);
   }
 
   public void countOrbits(){
     text(orbits,width/2,height/4);
+
+    if (x > width/2 && y < height/2 && scorecounting == false){
+      println("scorecounted");
+      orbits++;
+      scorecounting = true;
+    } else if (y > height/2) {
+      scorecounting = false;
+    }
+
   }
 
   public boolean checkCollision(float eX, float eY, float eR){
