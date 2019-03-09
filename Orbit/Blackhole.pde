@@ -6,7 +6,7 @@ class blackhole{
   blackhole(){
     x = width/2;
     y = width/2;
-    radius = 20;
+    radius = 10;
 
     println("init: " + this);
   }
