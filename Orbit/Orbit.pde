@@ -26,7 +26,7 @@ void draw(){
   background(0,0,85);
 
   if(gameover == true){
-
+    //you died
     if(player1.orbits > highScore){
       highScore = player1.orbits;
     }
@@ -36,11 +36,11 @@ void draw(){
     text("Highscore: " + highScore,width/2,(height/3)*2);
   } else {
 
-  player1.run();
+    player1.run();
 
-  blackhole1.run();
+    blackhole1.run();
 
-  checkGameover();
+    checkGameover();
 
   }
 }
