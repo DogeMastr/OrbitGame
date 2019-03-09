@@ -10,6 +10,7 @@ class player{
   float orbitRadius;
 
   int orbits; //score
+  boolean scorecounting;
   player(){
     centerX = width/2;
     centerY = height/2;
@@ -48,6 +49,15 @@ class player{
 
   void countOrbits(){
     text(orbits,width/2,height/4);
+
+    if (x > width/2 && y < height/2 && scorecounting == false){
+      println("scorecounted");
+      orbits++;
+      scorecounting = true;
+    } else if (y > height/2) {
+      scorecounting = false;
+    }
+
   }
 
   boolean checkCollision(float eX, float eY, float eR){
