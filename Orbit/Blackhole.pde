@@ -1,9 +1,9 @@
-class blackhole{
+class blackhole {
   float x;
   float y;
   float radius;
 
-  blackhole(){
+  blackhole() {
     x = width/2;
     y = width/2;
     radius = 10;
@@ -11,11 +11,11 @@ class blackhole{
     println("init: " + this);
   }
 
-  void run(){
+  void run() {
     display();
   }
 
-  void display(){
-    ellipse(x,y,radius*2,radius*2);
+  void display() {
+    ellipse(x, y, radius*2, radius*2);
   }
 }

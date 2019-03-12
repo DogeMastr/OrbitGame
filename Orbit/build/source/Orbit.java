@@ -39,6 +39,8 @@ public void setup(){
 
   scores = loadStrings("data/Scores.txt");
   highScore = PApplet.parseInt(scores[0]);
+
+  meteorList.add(new meteor(random(20,50),random(20,50),random(5,10),random(5,30),random(0,PI*2)));
 }
 
 public void draw(){
@@ -74,7 +76,7 @@ public void draw(){
 
 public void runMeteors(){
   for(int i = meteorList.size(); i > 0; i--){
-    meteorList.get(i).run();
+    meteorList.get(i);
 
     if(meteorList.get(i).checkCollision){
       gameover = true;

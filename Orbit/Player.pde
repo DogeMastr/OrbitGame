@@ -1,4 +1,4 @@
-class player{
+class player {
   float centerX;
   float centerY;
 
@@ -11,7 +11,7 @@ class player{
 
   int orbits; //score
   boolean scorecounting;
-  player(){
+  player() {
     centerX = width/2;
     centerY = height/2;
 
@@ -25,15 +25,15 @@ class player{
     println("init: "+ this);
   }
 
-  void run(){
+  void run() {
     move();
     display();
     countOrbits();
   }
 
-  void move(){
+  void move() {
     orbitTime += 4/orbitRadius;
-    if(mousePressed){
+    if (mousePressed) {
       orbitRadius++;
     } else {
       orbitRadius -= 0.8;
@@ -42,26 +42,25 @@ class player{
     y = (centerY + orbitRadius * sin(orbitTime));
   }
 
-  void display(){
+  void display() {
     fill(255);
-    ellipse(x,y,radius,radius);
+    ellipse(x, y, radius, radius);
   }
 
-  void countOrbits(){
-    text(orbits,width/2,height/4);
+  void countOrbits() {
+    text(orbits, width/2, height/4);
 
-    if (x > width/2 && y < height/2 && scorecounting == false){
+    if (x > width/2 && y < height/2 && scorecounting == false) {
       println("scorecounted");
       orbits++;
       scorecounting = true;
     } else if (y > height/2) {
       scorecounting = false;
     }
-
   }
 
-  boolean checkCollision(float eX, float eY, float eR){
-    if(dist(x,y,eX,eY) < eR + radius){
+  boolean checkCollision(float eX, float eY, float eR) {
+    if (dist(x, y, eX, eY) < eR + radius) {
       return true;
     } else {
       return false;
