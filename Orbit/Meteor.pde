@@ -63,6 +63,10 @@ class meteor {
     if pos 4 - right half rotation is random(PI,PI*2);
 
     also do random for x & y values that make sence thanks ttyl
+    pos 1 - y is width + 60 x is random(-60, width + 60);
+    pos 2 - y is - 60 x is the same as last time
+    pos 3 swap the x and y in pos 1 bit hieght
+    pos 4 wowie 
     */
   }
 
