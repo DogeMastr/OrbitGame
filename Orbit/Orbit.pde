@@ -34,6 +34,12 @@ void draw(){
     text("Gameover!",width/2,height/3);
     text("Score: "+player1.orbits,width/2,height/2);
     text("Highscore: " + highScore,width/2,(height/3)*2);
+
+    if(keyPressed){
+      gameover = false;
+      reset();
+    }
+
   } else {
 
     player1.run();
@@ -49,6 +55,10 @@ void checkGameover(){
   if(player1.checkCollision(blackhole1.x,blackhole1.y,blackhole1.radius)){
     gameover = true;
   }
+}
+
+void reset(){
+  player1 = new player();
 }
 
 void exit() {
