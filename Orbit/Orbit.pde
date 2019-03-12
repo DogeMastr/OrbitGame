@@ -2,7 +2,8 @@ player player1;
 
 blackhole blackhole1;
 
-ArrayList meteorList;
+ArrayList<meteor> meteorList;
+
 boolean gameover = false;
 
 //Scoring stuff
@@ -24,7 +25,7 @@ void setup() {
   scores = loadStrings("data/Scores.txt");
   highScore = int(scores[0]);
 
-  meteorList.add(new meteor(random(20, 50), random(20, 50), random(5, 10), random(5, 30), random(0, PI*2)));
+  meteorList.add(new meteor((int)random(1,2),(int)random(1,2),random(5,10),random(5,30)));
 }
 
 void draw() {
@@ -57,13 +58,15 @@ void draw() {
 }
 
 void runMeteors() {
-  for (int i = meteorList.size(); i > 0; i--) {
-    meteorList.get(i).display();
+  for (int i = meteorList.size() - 1; i >= 0; i--) {
 
-    if (meteorList.get(i).checkCollision) {
+    meteorList.get(i).run();
+
+    if (meteorList.get(i).checkCollision(player1)) {
       gameover = true;
-    } else if (meteorList.get(i).checkOutOfBounds) {
+    } else if (meteorList.get(i).checkOutOfBounds()) {
       meteorList.remove(i);
+      meteorList.add(new meteor((int)random(1,2),(int)random(1,2),random(5,10),random(5,30)));
     }
   }
 }

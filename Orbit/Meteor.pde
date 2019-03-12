@@ -10,16 +10,20 @@ class meteor {
   float xMoveSpeed;
   float yMoveSpeed;
 
-  // meteor(random(20,50),random(20,50),random(5,10),random(5,30),random(0,PI*2))
-  meteor(float _x, float _y, float _r, float _s, float _ro) {
+  // meteor(random(1,2),random(1,2),random(5,10),random(5,30))
+  meteor(int _x, int _y, float _r, float _s) {
     x = _x;
     y = _y;
     radius = _r;
 
     speed = _s;
-    rotation = _ro;
+    rotation = 0;
 
     initRotation();
+
+    yMoveSpeed = speed*cos(rotation);
+    xMoveSpeed = speed*sin(rotation);
+    println("init: "+ this);
   }
 
   void initRotation() {
@@ -28,22 +32,16 @@ class meteor {
     //       2*PI
     // PI*1.5    PI/2
     //       PI
-    if (rotation >= 0 && rotation <= PI/2) {
-      //going top right
-      x = 0 - x;
-      y = y + height;
-    } else if (rotation >= PI/2 && rotation <= PI) {
-      //going bottom right
-      x = 0 - x;
-      y = 0 - y;
-    } else if (rotation >= PI && rotation <= PI*1.5) {
-      //going bottom left
-      x = x + width;
-      y = 0 - y;
-    } else {
-      //going top left
-      x = x + width;
-      y = y + height;
+    if (x == 1){
+      x = random(-60, -20);
+    } else if (x == 2){
+      x = random(width + 20, width + 60);
+    }
+
+    if(y == 1){
+      y = random(-60, -20);
+    } else if(y ==2){
+      y = random(width + 20, width + 60);
     }
   }
 
@@ -70,13 +68,13 @@ class meteor {
   }
 
   boolean checkOutOfBounds() {
-    if (x > width + radius * 3) {
+    if (x > width + radius * 6) {
       return true;
-    } else if (x < 0 - radius * 3) {
+    } else if (x < 0 - radius * 6) {
       return true;
-    } else if (y > height + radius * 3) {
+    } else if (y > height + radius * 6) {
       return true;
-    } else if (y < 0 - radius * 3) {
+    } else if (y < 0 - radius * 6) {
       return true;
     } else {
       return false;
