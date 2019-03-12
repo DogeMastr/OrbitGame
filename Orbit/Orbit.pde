@@ -25,7 +25,7 @@ void setup() {
   scores = loadStrings("data/Scores.txt");
   highScore = int(scores[0]);
 
-  meteorList.add(new meteor(random(20,50),random(20,50),random(5,10),random(5,30),random(0,PI*2)));
+  meteorList.add(new meteor(random(20,50),random(20,50),random(10,20),random(5,10),random(0,PI*2)));
 }
 
 void draw() {
@@ -66,7 +66,7 @@ void runMeteors() {
       gameover = true;
     } else if (meteorList.get(i).checkOutOfBounds()) {
       meteorList.remove(i);
-      meteorList.add(new meteor(random(20,50),random(20,50),random(5,10),random(5,30),random(0,PI*2)));
+      meteorList.add(new meteor(random(20,50),random(20,50),random(10,20),random(5,10),random(0,PI*2)));
     }
   }
 }

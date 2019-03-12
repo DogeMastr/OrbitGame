@@ -41,7 +41,7 @@ public void setup() {
   scores = loadStrings("data/Scores.txt");
   highScore = PApplet.parseInt(scores[0]);
 
-  meteorList.add(new meteor(random(20,50),random(20,50),random(5,10),random(5,30),random(0,PI*2)));
+  meteorList.add(new meteor(random(20,50),random(20,50),random(10,20),random(5,10),random(0,PI*2)));
 }
 
 public void draw() {
@@ -82,7 +82,7 @@ public void runMeteors() {
       gameover = true;
     } else if (meteorList.get(i).checkOutOfBounds()) {
       meteorList.remove(i);
-      meteorList.add(new meteor(random(20,50),random(20,50),random(5,10),random(5,30),random(0,PI*2)));
+      meteorList.add(new meteor(random(20,50),random(20,50),random(10,20),random(5,10),random(0,PI*2)));
     }
   }
 }
@@ -137,7 +137,7 @@ class meteor {
   float xMoveSpeed;
   float yMoveSpeed;
 
-  // meteor(random(20,50),random(20,50),random(5,10),random(5,30),random(0,PI*2))
+  // meteor(random(20,50),random(20,50),random(10,20),random(5,10),random(0,PI*2))
   meteor(float _x, float _y, float _r, float _s, float _ro) {
     x = _x;
     y = _y;

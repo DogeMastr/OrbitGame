@@ -10,7 +10,7 @@ class meteor {
   float xMoveSpeed;
   float yMoveSpeed;
 
-  // meteor(random(20,50),random(20,50),random(5,10),random(5,30),random(0,PI*2))
+  // meteor(random(20,50),random(20,50),random(10,20),random(5,10),random(0,PI*2))
   meteor(float _x, float _y, float _r, float _s, float _ro) {
     x = _x;
     y = _y;
@@ -32,6 +32,8 @@ class meteor {
     //       2*PI
     // PI*1.5    PI/2
     //       PI
+
+    //replace these with randoms thanks
     if (rotation >= 0 && rotation <= PI/2) {
       //going top right
       x = 0 - x;
@@ -49,6 +51,19 @@ class meteor {
       x = x + width;
       y = 0 - y;
     }
+
+    /*
+    change everything to this pleasseee
+
+    int position = random(1,4); whatever im tires now
+
+    if pos 1 - bottom half of the screen, rotation is random(PI*1.5, PI/2);
+    if pos 2 - top half rotation is random(PI/2, PI*1.5);
+    if pos 3 - left half rotation is random(0,PI);
+    if pos 4 - right half rotation is random(PI,PI*2);
+
+    also do random for x & y values that make sence thanks ttyl
+    */
   }
 
   void run() {
