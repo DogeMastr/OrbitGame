@@ -18,6 +18,7 @@ player player1;
 
 blackhole blackhole1;
 
+ArrayList meteorList;
 boolean gameover = false;
 
 //Scoring stuff
@@ -33,6 +34,8 @@ public void setup(){
   player1 = new player();
 
   blackhole1 = new blackhole();
+
+  meteorList = new ArrayList<meteor>();
 
   scores = loadStrings("data/Scores.txt");
   highScore = PApplet.parseInt(scores[0]);
@@ -62,8 +65,22 @@ public void draw(){
 
     blackhole1.run();
 
+    runMeteors();
+
     checkGameover();
 
+  }
+}
+
+public void runMeteors(){
+  for(int i = meteorList.size(); i > 0; i--){
+    meteorList.get(i).run();
+
+    if(meteorList.get(i).checkCollision){
+      gameover = true;
+    } else if(meteorList.get(i).checkOutOfBounds){
+      meteorList.remove(i);
+    }
   }
 }
 
@@ -74,7 +91,7 @@ public void checkGameover(){
 }
 
 public void reset(){
-  player1 = new player(); 
+  player1 = new player();
 }
 
 public void exit() {
@@ -103,6 +120,91 @@ class blackhole{
 
   public void display(){
     ellipse(x,y,radius*2,radius*2);
+  }
+}
+class meteor{
+
+  float x;
+  float y;
+  float radius;
+
+  float speed;
+  float rotation;
+
+  float xMoveSpeed;
+  float yMoveSpeed;
+
+  // meteor(random(20,50),random(20,50),random(5,10),random(5,30),random(0,PI*2))
+  meteor(float _x, float _y, float _r, float _s, float _ro){
+    x = _x;
+    y = _y;
+    radius = _r;
+
+    speed = _s;
+    rotation = _ro;
+
+    initRotation();
+  }
+
+  public void initRotation(){
+    //x & y values are random 20 - 50, depending on rotation add width +| height
+    //Clock face but in PI
+    //       2*PI
+    // PI*1.5    PI/2
+    //       PI
+    if(rotation >= 0 && rotation <= PI/2){
+      //going top right
+      x = 0 - x;
+      y = y + height;
+    } else if(rotation >= PI/2 && rotation <= PI){
+      //going bottom right
+      x = 0 - x;
+      y = 0 - y;
+    } else if(rotation >= PI && rotation <= PI*1.5f){
+      //going bottom left
+      x = x + width;
+      y = 0 - y;
+    } else {
+      //going top left
+      x = x + width;
+      y = y + height;
+    }
+  }
+
+  public void run(){
+    display();
+    move();
+  }
+
+  public void display(){
+    ellipse(x,y,radius,radius);
+  }
+
+  public void move(){
+    x += xMoveSpeed;
+    y += yMoveSpeed;
+  }
+
+  public boolean checkCollision(player e){
+    if(dist(x,y,e.x,e.y) < e.radius + radius){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean checkOutOfBounds(){
+    if(x > width + radius * 3){
+      return true;
+    } else if (x < 0 - radius * 3){
+      return true;
+    } else if (y > height + radius * 3){
+      return true;
+    } else if (y < 0 - radius * 3){
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 class player{
