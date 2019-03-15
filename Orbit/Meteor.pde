@@ -13,25 +13,22 @@ class meteor {
 
   // meteor(random(int)(1,4),random(10,20),random(5,10));
   meteor(float _pos, float _r, float _s) {
-    x = _x;
-    y = _y;
-    radius = _r;
+
+    radius = _r/2;
     pos = _pos;
 
     speed = _s;
-    rotation = _ro;
 
     initRotation();
 
-    yMoveSpeed = speed*cos(rotation);
-    xMoveSpeed = speed*sin(rotation);
     println("init: "+ this);
+    println(pos);
   }
 
   void initRotation() {
     //x & y values are random 20 - 50, depending on rotation add width +| height
     //Clock face but in PI
-    //       2*PI
+    //       PI*2
     // PI*1.5    PI/2
     //       PI
 
@@ -72,29 +69,32 @@ class meteor {
     */
 
     if(pos == 1){
-      rotation = random(PI*1.5, PI/2);
+      rotation = random(PI*1.5,PI*2.5);
 
-      x = random(-60, width + 60);
-      y = width + 60;
+			x = -60;
+			y = random(-60, height + 60);;
 
     } else if(pos == 2){
       rotation = random(PI/2, PI*1.5);
 
-      x = random(-60, width + 60);
-      y = -60;
+			x = width + 60;
+			y = random(-60, height + 60);
 
     } else if(pos == 3){
       rotation = random(0,PI);
 
-      x = width + 60;
-      y = random(-60, height + 60);
-      
+			x = random(-60, width + 60);
+				y = width + 60;
+
     } else {
       rotation = random(PI, PI/2);
 
-      x = -60;
-      y = random(-60, height + 60);;
+			x = random(-60, width + 60);
+			y = -60;
     }
+
+      yMoveSpeed = speed*cos(rotation);
+      xMoveSpeed = speed*sin(rotation);
   }
 
   void run() {
@@ -112,7 +112,7 @@ class meteor {
   }
 
   boolean checkCollision(player e) {
-    if (dist(x, y, e.x, e.y) < e.radius + radius) {
+    if (dist(x, y, e.x, e.y) < e.radius/2 + radius) {
       return true;
     } else {
       return false;
