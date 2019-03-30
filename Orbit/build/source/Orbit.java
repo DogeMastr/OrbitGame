@@ -130,20 +130,20 @@ public void runMeteors() {
       meteorList.remove(i);
       meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
     }
+
+		if (meteorList.get(i).checkNMissCollision(player1)){
+			player1.addScore();
+		}
   }
 
 	//getting another meteor every so often
 	if(pastSecond != second()){
 		pastSecond = second();
 		meteorTimer++;
-		holeTimer++;
 	}
 	if(meteorTimer >= 30){
 		meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
 		meteorTimer = 0;
-	}
-	if(holeTimer >= 10 && player1.orbits > 0){
-		blackhole1.radius += 0.1f;
 	}
 }
 
@@ -208,12 +208,23 @@ class blackhole {
 
   public void run() {
     display();
+		getBigger();
   }
 
   public void display() {
 		fill(0);
     ellipse(x, y, radius*2, radius*2);
   }
+
+	public void getBigger(){ //makes the blackhole bigger when u have more than 40 points
+		if(pastSecond != second()){
+			holeTimer++;
+		}
+		if(holeTimer >= 10 && player1.orbits > 40){
+			radius += 0.1f;
+			holeTimer = 0;
+		}
+	}
 }
 	class meteor {
 
@@ -228,6 +239,8 @@ class blackhole {
   float xMoveSpeed;
   float yMoveSpeed;
 
+	boolean missed; //can only be near missed once
+
   // meteor(random(int)(1,4),random(10,20),random(5,10));
   meteor(float _pos, float _r, float _s) {
 
@@ -237,6 +250,8 @@ class blackhole {
     speed = _s;
 
     initRotation();
+
+		missed = false;
 
     println("init: "+ this);
   }
@@ -299,6 +314,16 @@ class blackhole {
     }
   }
 
+	public boolean checkNMissCollision(player e) {
+		//returns true if u are close to one
+    if (dist(x, y, e.x, e.y) < e.radius/2 + radius + 20 && !missed) {
+			missed = true;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public boolean checkOutOfBounds() {
     if (x > width + radius * 6) {
       return true;
@@ -326,6 +351,11 @@ class player {
 
   int orbits; //score
   boolean scorecounting;
+
+	boolean showPlusOne;
+	float plusX;
+	float plusY;
+	int fade;
   player() {
     centerX = width/2;
     centerY = height/2;
@@ -337,6 +367,10 @@ class player {
 
     orbits = 0;
 
+		showPlusOne = false;
+
+		fade = 255;
+
     println("init: "+ this);
   }
 
@@ -344,6 +378,7 @@ class player {
     move();
     display();
     countOrbits();
+		plusOne();
   }
 
   public void move() {
@@ -365,7 +400,7 @@ class player {
   public void countOrbits() {
     if (x > width/2 && y < height/2 && scorecounting == false) {
       println("scorecounted");
-      orbits++;
+      addScore();
       scorecounting = true;
     } else if (y > height/2) {
       scorecounting = false;
@@ -379,6 +414,32 @@ class player {
       return false;
     }
   }
+
+	public void addScore(){
+		orbits++;
+		showPlusOne = true;
+		fade = 255;
+		plusX = x + radius;
+		plusY = y + radius;
+	}
+
+	public void plusOne() {
+	  if (showPlusOne) {
+
+	    fill(255, 255, 255, fade);
+	    textSize(20);
+
+	    text("+1", plusX, plusY);
+
+	    if (fade < 0) {
+	      showPlusOne = false;
+				fade = 255;
+	    } else {
+	      fade = fade - 5;
+	      plusY = plusY - 2;
+	    }
+	  }
+	}
 }
   public void settings() {  size(800, 800); }
   static public void main(String[] passedArgs) {

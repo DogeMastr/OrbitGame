@@ -11,6 +11,11 @@ class player {
 
   int orbits; //score
   boolean scorecounting;
+
+	boolean showPlusOne;
+	float plusX;
+	float plusY;
+	int fade;
   player() {
     centerX = width/2;
     centerY = height/2;
@@ -22,6 +27,10 @@ class player {
 
     orbits = 0;
 
+		showPlusOne = false;
+
+		fade = 255;
+
     println("init: "+ this);
   }
 
@@ -29,6 +38,7 @@ class player {
     move();
     display();
     countOrbits();
+		plusOne();
   }
 
   void move() {
@@ -50,7 +60,7 @@ class player {
   void countOrbits() {
     if (x > width/2 && y < height/2 && scorecounting == false) {
       println("scorecounted");
-      orbits++;
+      addScore();
       scorecounting = true;
     } else if (y > height/2) {
       scorecounting = false;
@@ -64,4 +74,30 @@ class player {
       return false;
     }
   }
+
+	void addScore(){
+		orbits++;
+		showPlusOne = true;
+		fade = 255;
+		plusX = x + radius;
+		plusY = y + radius;
+	}
+
+	void plusOne() {
+	  if (showPlusOne) {
+
+	    fill(255, 255, 255, fade);
+	    textSize(20);
+
+	    text("+1", plusX, plusY);
+
+	    if (fade < 0) {
+	      showPlusOne = false;
+				fade = 255;
+	    } else {
+	      fade = fade - 5;
+	      plusY = plusY - 2;
+	    }
+	  }
+	}
 }

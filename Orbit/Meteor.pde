@@ -11,6 +11,8 @@
   float xMoveSpeed;
   float yMoveSpeed;
 
+	boolean missed; //can only be near missed once
+
   // meteor(random(int)(1,4),random(10,20),random(5,10));
   meteor(float _pos, float _r, float _s) {
 
@@ -20,6 +22,8 @@
     speed = _s;
 
     initRotation();
+
+		missed = false;
 
     println("init: "+ this);
   }
@@ -76,6 +80,16 @@
 
   boolean checkCollision(player e) {
     if (dist(x, y, e.x, e.y) < e.radius/2 + radius) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+	boolean checkNMissCollision(player e) {
+		//returns true if u are close to one
+    if (dist(x, y, e.x, e.y) < e.radius/2 + radius + 20 && !missed) {
+			missed = true;
       return true;
     } else {
       return false;

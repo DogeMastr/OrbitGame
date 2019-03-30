@@ -114,21 +114,20 @@ void runMeteors() {
       meteorList.remove(i);
       meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
     }
+
+		if (meteorList.get(i).checkNMissCollision(player1)){
+			player1.addScore();
+		}
   }
 
 	//getting another meteor every so often
 	if(pastSecond != second()){
 		pastSecond = second();
 		meteorTimer++;
-		holeTimer++;
 	}
 	if(meteorTimer >= 30){
 		meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
 		meteorTimer = 0;
-	}
-	if(holeTimer >= 10 && player1.orbits > 40){
-		blackhole1.radius += 0.1;
-		holeTimer = 0;
 	}
 }
 
