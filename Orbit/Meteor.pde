@@ -60,6 +60,7 @@
   }
 
   void display() {
+		fill(219,49,49);
     ellipse(x, y, radius, radius);
 		if(debug){
   		textAlign(CENTER, TOP);

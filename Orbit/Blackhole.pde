@@ -6,7 +6,7 @@ class blackhole {
   blackhole() {
     x = width/2;
     y = width/2;
-    radius = 10;
+    radius = 40;
 
     println("init: " + this);
   }
@@ -16,6 +16,7 @@ class blackhole {
   }
 
   void display() {
+		fill(0);
     ellipse(x, y, radius*2, radius*2);
   }
 }

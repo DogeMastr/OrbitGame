@@ -28,12 +28,14 @@ int highScore;
 
 //timing stuff
 int pastSecond;
-int timer;
+int meteorTimer;
+int holeTimer;
 
 boolean menu;
 
 boolean debug;
 int framerate;
+boolean slowmode = false;
 public void setup() {
   
 
@@ -100,9 +102,6 @@ public void play(){
     }
   } else {
 		//ye still be playin
-		textSize(40);
-	 	textAlign(CENTER, TOP);
-	  text(player1.orbits, width/2, height/4);
 
     player1.run();
 
@@ -111,6 +110,10 @@ public void play(){
     runMeteors();
 
     checkGameover();
+
+		textSize(40);
+		textAlign(CENTER,CENTER);
+		text(player1.orbits, width/2, height/2);
 
 		debugMode();
   }
@@ -132,11 +135,15 @@ public void runMeteors() {
 	//getting another meteor every so often
 	if(pastSecond != second()){
 		pastSecond = second();
-		timer++;
+		meteorTimer++;
+		holeTimer++;
 	}
-	if(timer >= 30){
+	if(meteorTimer >= 30){
 		meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
-		timer = 0;
+		meteorTimer = 0;
+	}
+	if(holeTimer >= 10 && player1.orbits > 0){
+		blackhole1.radius += 0.1f;
 	}
 }
 
@@ -170,15 +177,19 @@ public void debugMode(){
 		text("Metors: "+meteorList.size(),0,40);
 		text("Distance: "+player1.orbitRadius,0,60);
 		text("framerate: " + framerate, 0,80);
-		text("timer: " + timer, 0,100);
+		text("meteor timer: " + meteorTimer, 0,100);
+		text("blackhole timer: " + holeTimer, 0,100);
 		if(mousePressed){
 			if(mouseButton == 3){
-				framerate = 10;
-				frameRate(framerate);
-			} else {
-				framerate = 60;
-				frameRate(framerate);
+				slowmode = !slowmode;
 			}
+		}
+		if(slowmode){
+			framerate = 10;
+			frameRate(framerate);
+		} else {
+			framerate = 60;
+			frameRate(framerate);
 		}
 	}
 }
@@ -190,7 +201,7 @@ class blackhole {
   blackhole() {
     x = width/2;
     y = width/2;
-    radius = 10;
+    radius = 40;
 
     println("init: " + this);
   }
@@ -200,6 +211,7 @@ class blackhole {
   }
 
   public void display() {
+		fill(0);
     ellipse(x, y, radius*2, radius*2);
   }
 }
@@ -265,6 +277,7 @@ class blackhole {
   }
 
   public void display() {
+		fill(219,49,49);
     ellipse(x, y, radius, radius);
 		if(debug){
   		textAlign(CENTER, TOP);
@@ -345,7 +358,7 @@ class player {
   }
 
   public void display() {
-    fill(255);
+    fill(18,231,18);
     ellipse(x, y, radius, radius);
   }
 

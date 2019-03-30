@@ -12,7 +12,8 @@ int highScore;
 
 //timing stuff
 int pastSecond;
-int timer;
+int meteorTimer;
+int holeTimer;
 
 boolean menu;
 
@@ -85,9 +86,6 @@ void play(){
     }
   } else {
 		//ye still be playin
-		textSize(40);
-	 	textAlign(CENTER, TOP);
-	  text(player1.orbits, width/2, height/4);
 
     player1.run();
 
@@ -96,6 +94,10 @@ void play(){
     runMeteors();
 
     checkGameover();
+
+		textSize(40);
+		textAlign(CENTER,CENTER);
+		text(player1.orbits, width/2, height/2);
 
 		debugMode();
   }
@@ -117,11 +119,15 @@ void runMeteors() {
 	//getting another meteor every so often
 	if(pastSecond != second()){
 		pastSecond = second();
-		timer++;
+		meteorTimer++;
+		holeTimer++;
 	}
-	if(timer >= 30){
+	if(meteorTimer >= 30){
 		meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
-		timer = 0;
+		meteorTimer = 0;
+	}
+	if(holeTimer >= 10 && player1.orbits > 40){
+		blackhole1.radius += 0.1;
 	}
 }
 
@@ -155,16 +161,19 @@ void debugMode(){
 		text("Metors: "+meteorList.size(),0,40);
 		text("Distance: "+player1.orbitRadius,0,60);
 		text("framerate: " + framerate, 0,80);
-		text("timer: " + timer, 0,100);
+		text("meteor timer: " + meteorTimer, 0,100);
+		text("blackhole timer: " + holeTimer, 0,100);
 		if(mousePressed){
 			if(mouseButton == 3){
-				if(slowmode){
-					framerate = 10;
-					frameRate(framerate);
-				} else {
-					framerate = 60;
-					frameRate(framerate);
+				slowmode = !slowmode;
 			}
+		}
+		if(slowmode){
+			framerate = 10;
+			frameRate(framerate);
+		} else {
+			framerate = 60;
+			frameRate(framerate);
 		}
 	}
 }

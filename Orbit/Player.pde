@@ -43,7 +43,7 @@ class player {
   }
 
   void display() {
-    fill(255);
+    fill(18,231,18);
     ellipse(x, y, radius, radius);
   }
 
