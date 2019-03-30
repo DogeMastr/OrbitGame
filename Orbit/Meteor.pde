@@ -22,8 +22,6 @@
     initRotation();
 
     println("init: "+ this);
-    println(pos);
-		println(rotation);
   }
 
   void initRotation() {
@@ -63,6 +61,11 @@
 
   void display() {
     ellipse(x, y, radius, radius);
+		if(debug){
+  		textAlign(CENTER, TOP);
+			textSize(20);
+			text(rotation,x,y+radius);
+		}
   }
 
   void move() {

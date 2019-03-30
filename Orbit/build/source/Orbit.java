@@ -26,6 +26,14 @@ boolean gameover = false;
 String[] scores;
 int highScore;
 
+//timing stuff
+int pastSecond;
+int timer;
+
+boolean menu;
+
+boolean debug;
+int framerate;
 public void setup() {
   
 
@@ -41,27 +49,60 @@ public void setup() {
   scores = loadStrings("data/Scores.txt");
   highScore = PApplet.parseInt(scores[0]);
 
-  meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
+	meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
+
+	menu = true;
+	debug = false;
+
+	framerate = 60;
+	frameRate(framerate);
 }
 
 public void draw() {
   background(0, 0, 85);
+	if(menu){
+		menu();
+	} else {
+		play();
+	}
+}
 
-  if (gameover == true) {
+public void menu(){
+	//draws the main menu, displays highscore & can activate debug mode
+	text("Click to move!",width/2,height/5);
+	text("Press any key to start!", width/2, (height/5)*2);
+	text("Highsscore: "+highScore, width/2, (height/5)*3);
+
+	if(keyPressed){
+		if(key == 'b'){
+			debug = true;
+			menu = false;
+		} else {
+			menu = false;
+		}
+	}
+}
+public void play(){
+	if (gameover == true) {
     //you died
     if (player1.orbits > highScore) {
       highScore = player1.orbits;
     }
-
+		textAlign(CENTER, TOP);
+		textSize(40);
     text("Gameover!", width/2, height/3);
     text("Score: "+player1.orbits, width/2, height/2);
     text("Highscore: " + highScore, width/2, (height/3)*2);
-
     if (keyPressed) {
       gameover = false;
       reset();
+			meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
     }
   } else {
+		//ye still be playin
+		textSize(40);
+	 	textAlign(CENTER, TOP);
+	  text(player1.orbits, width/2, height/4);
 
     player1.run();
 
@@ -70,6 +111,8 @@ public void draw() {
     runMeteors();
 
     checkGameover();
+
+		debugMode();
   }
 }
 
@@ -85,6 +128,16 @@ public void runMeteors() {
       meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
     }
   }
+
+	//getting another meteor every so often
+	if(pastSecond != second()){
+		pastSecond = second();
+		timer++;
+	}
+	if(timer >= 30){
+		meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
+		timer = 0;
+	}
 }
 
 public void checkGameover() {
@@ -95,6 +148,10 @@ public void checkGameover() {
 
 public void reset() {
   player1 = new player();
+
+	for (int i = meteorList.size() - 1; i >= 0; i--) {
+		meteorList.remove(i);
+	}
 }
 
 public void exit() {
@@ -103,6 +160,27 @@ public void exit() {
   println(scores[0]);
   saveStrings("data/Scores.txt", scores);
   super.exit();
+}
+
+public void debugMode(){
+	if(debug){
+		textAlign(LEFT,BOTTOM);
+		textSize(20);
+		text("Debug: "+ debug,0,20);
+		text("Metors: "+meteorList.size(),0,40);
+		text("Distance: "+player1.orbitRadius,0,60);
+		text("framerate: " + framerate, 0,80);
+		text("timer: " + timer, 0,100);
+		if(mousePressed){
+			if(mouseButton == 3){
+				framerate = 10;
+				frameRate(framerate);
+			} else {
+				framerate = 60;
+				frameRate(framerate);
+			}
+		}
+	}
 }
 class blackhole {
   float x;
@@ -149,8 +227,6 @@ class blackhole {
     initRotation();
 
     println("init: "+ this);
-    println(pos);
-		println(rotation);
   }
 
   public void initRotation() {
@@ -170,10 +246,10 @@ class blackhole {
 			rotation = random(3.665191f,5.235988f);
 
 			x = random(-60, width + 60);
-				y = width + 60;
+			y = width + 60;
 
     } else {
-      rotation = random(5.235988f,6.806784f);
+			rotation = random(5.235988f,6.806784f);
 
 			x = random(-60, width + 60);
 			y = -60;
@@ -190,6 +266,11 @@ class blackhole {
 
   public void display() {
     ellipse(x, y, radius, radius);
+		if(debug){
+  		textAlign(CENTER, TOP);
+			textSize(20);
+			text(rotation,x,y+radius);
+		}
   }
 
   public void move() {
@@ -269,8 +350,6 @@ class player {
   }
 
   public void countOrbits() {
-    text(orbits, width/2, height/4);
-
     if (x > width/2 && y < height/2 && scorecounting == false) {
       println("scorecounted");
       orbits++;
