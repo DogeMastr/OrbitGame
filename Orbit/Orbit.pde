@@ -128,6 +128,7 @@ void runMeteors() {
 	}
 	if(holeTimer >= 10 && player1.orbits > 40){
 		blackhole1.radius += 0.1;
+		holeTimer = 0;
 	}
 }
 
