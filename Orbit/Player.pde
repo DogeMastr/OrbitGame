@@ -33,7 +33,7 @@ class player {
 
 		fade = 255;
 
-    println("init: "+ this);
+    //println("init: "+ this);
   }
 
   void run() {

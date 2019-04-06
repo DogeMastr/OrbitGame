@@ -34,6 +34,8 @@ int framerate;
 boolean slowmode = false;
 
 boolean startedTyping = false;
+boolean das = false; //das = delayed auto shift, basicly stops the key being pressed every frame
+int dasTimer;
 
 void setup() {
   size(800, 800);
@@ -55,9 +57,11 @@ void setup() {
 	secondScore = int(scores[1]);
 	thirdScore = int(scores[2]);
 
-	topName = scores[3];
-	secondName = scores[4];
-	thirdName = scores[5];
+	topName = scores[4];
+	secondName = scores[5];
+	thirdName = scores[6];
+
+	currentString = scores[4];
 
 	meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
 
@@ -66,8 +70,6 @@ void setup() {
 
 	framerate = 60;
 	frameRate(framerate);
-
-	println(itemList.size());
 }
 
 void draw() {
@@ -98,11 +100,12 @@ void menu(){
 void play(){
 	if (gameover == true) {
     //you died
-		if (player1.orbits > topScore) {
+		if (player1.orbits >= topScore) {
       topScore = player1.orbits;
 
 			text("You got the top score!", width/2, height/3);
-			text("Enter your name" + currentString, width/2, height/2);
+			text("Enter your name", width/2, height/2);
+			text(currentString + ": "+player1.orbits,width/2,(height/3)*2);
 			startedTyping = true;
 			typing();
 			if(startedTyping == false){
@@ -116,7 +119,7 @@ void play(){
     	text("Highscore: " + topScore, width/2, (height/3)*2); //replace showing the top 3
 		}
 
-		if (keyPressed) {
+		if (keyPressed && !startedTyping) {
       gameover = false;
       reset();
 			meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
@@ -246,18 +249,54 @@ void debugMode(){
 
 void typing(){
 	if(startedTyping){
+		println(key);
 
 		if(keyPressed){
+
 			if(key == BACKSPACE){
-				currentString -= currentString.length;
+				if(currentString.length() > 1){ //if there is contence in the string
+					currentString = currentString.substring(0, max(0, currentString.length()-1));
+				}
+
+			} else if(key == ENTER){ //if enter is pressed
+				startedTyping = false; //ends typing & continues the program
 			}
-			if(key == ENTER){
-				startedTyping = false;
+
+			else if(currentString.charAt(currentString.length()-1) != key || das) { //if any other key but the last one that was pressed is pressed OR das
+				currentString += key; //types key
 			}
-			currentString += key;
+
+			else if(currentString.charAt(currentString.length()-1) == key ){
+				dasTimer++;
+				if(dasTimer > 20){
+					das = true;
+				}
+			}
+
+		} else { //no key pressed
+			dasTimer = 0;
+			das = false;
 		}
 	}
 
+	/*
+		how DAS works
+		if you hold down a button for a while it will type it, wait for like half a second
+		and then it would spam the key
+
+		test area: aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+		sudo code:
+		if same key held down
+			dasTimer++
+
+		if dasTimer > 20 //waits 20 frames before spamming
+			das = true
+
+		if other key pressed
+			dasTimer = 0
+			type that key
+	*/
 }
 
 void exit() {

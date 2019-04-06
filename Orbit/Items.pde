@@ -32,7 +32,7 @@ class item{
 
 		type = _type;
 
-		println("init: "+ this);
+		//println("init: "+ this);
 	}
 
 	void initRotation() {

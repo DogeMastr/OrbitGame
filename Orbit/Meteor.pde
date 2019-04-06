@@ -25,7 +25,7 @@
 
 		missed = false;
 
-    println("init: "+ this);
+    //println("init: "+ this);
   }
 
   void initRotation() {
