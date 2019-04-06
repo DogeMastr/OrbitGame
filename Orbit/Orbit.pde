@@ -10,8 +10,16 @@ boolean gameover = false;
 
 //Scoring stuff
 String[] scores;
-int highScore;
 
+int topScore;
+int secondScore;
+int thirdScore;
+
+String topName;
+String secondName;
+String thirdName;
+
+String currentString;
 //timing stuff
 int pastSecond;
 boolean timer;
@@ -24,6 +32,8 @@ boolean menu;
 boolean debug;
 int framerate;
 boolean slowmode = false;
+
+boolean startedTyping = false;
 
 void setup() {
   size(800, 800);
@@ -40,7 +50,14 @@ void setup() {
 	itemList = new ArrayList<item>();
 
   scores = loadStrings("data/Scores.txt");
-  highScore = int(scores[0]);
+
+	topScore = int(scores[0]);
+	secondScore = int(scores[1]);
+	thirdScore = int(scores[2]);
+
+	topName = scores[3];
+	secondName = scores[4];
+	thirdName = scores[5];
 
 	meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
 
@@ -66,7 +83,7 @@ void menu(){
 	//draws the main menu, displays highscore & can activate debug mode
 	text("Click to move!",width/2,height/5);
 	text("Press any key to start!", width/2, (height/5)*2);
-	text("Highsscore: "+highScore, width/2, (height/5)*3);
+	text("Highsscore: "+ topScore, width/2, (height/5)*3);
 
 	if(keyPressed){
 		if(key == 'b'){
@@ -77,22 +94,34 @@ void menu(){
 		}
 	}
 }
+
 void play(){
 	if (gameover == true) {
     //you died
-    if (player1.orbits > highScore) {
-      highScore = player1.orbits;
-    }
-		textAlign(CENTER, TOP);
-		textSize(40);
-    text("Gameover!", width/2, height/3);
-    text("Score: "+player1.orbits, width/2, height/2);
-    text("Highscore: " + highScore, width/2, (height/3)*2);
-    if (keyPressed) {
+		if (player1.orbits > topScore) {
+      topScore = player1.orbits;
+
+			text("You got the top score!", width/2, height/3);
+			text("Enter your name" + currentString, width/2, height/2);
+			startedTyping = true;
+			typing();
+			if(startedTyping == false){
+				topName = currentString;
+			}
+    } else {
+			textAlign(CENTER, TOP);
+			textSize(40);
+    	text("Gameover!", width/2, height/3);
+    	text("Score: "+player1.orbits, width/2, height/2);
+    	text("Highscore: " + topScore, width/2, (height/3)*2); //replace showing the top 3
+		}
+
+		if (keyPressed) {
       gameover = false;
       reset();
 			meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
-    }
+		}
+
   } else {
 		//ye still be playin
 		runTimer();
@@ -190,14 +219,6 @@ void reset() {
 	}
 }
 
-void exit() {
-  println(highScore);
-  scores[0] = str(highScore);
-  println(scores[0]);
-  saveStrings("data/Scores.txt", scores);
-  super.exit();
-}
-
 void debugMode(){
 	if(debug){
 		textAlign(LEFT,BOTTOM);
@@ -221,4 +242,25 @@ void debugMode(){
 			frameRate(framerate);
 		}
 	}
+}
+
+void typing(){
+	if(startedTyping){
+
+		if(keyPressed){
+			if(key == BACKSPACE){
+				currentString -= currentString.length;
+			}
+			if(key == ENTER){
+				startedTyping = false;
+			}
+			currentString += key;
+		}
+	}
+
+}
+
+void exit() {
+	saveStrings("data/Scores.txt", scores);
+	super.exit();
 }
