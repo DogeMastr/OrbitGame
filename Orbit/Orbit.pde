@@ -4,6 +4,8 @@ blackhole blackhole1;
 
 ArrayList<meteor> meteorList;
 
+ArrayList<item> itemList;
+
 boolean gameover = false;
 
 //Scoring stuff
@@ -12,14 +14,17 @@ int highScore;
 
 //timing stuff
 int pastSecond;
+boolean timer;
 int meteorTimer;
 int holeTimer;
+int itemTimer;
 
 boolean menu;
 
 boolean debug;
 int framerate;
 boolean slowmode = false;
+
 void setup() {
   size(800, 800);
 
@@ -32,6 +37,8 @@ void setup() {
 
   meteorList = new ArrayList<meteor>();
 
+	itemList = new ArrayList<item>();
+
   scores = loadStrings("data/Scores.txt");
   highScore = int(scores[0]);
 
@@ -42,6 +49,8 @@ void setup() {
 
 	framerate = 60;
 	frameRate(framerate);
+
+	println(itemList.size());
 }
 
 void draw() {
@@ -86,6 +95,7 @@ void play(){
     }
   } else {
 		//ye still be playin
+		runTimer();
 
     player1.run();
 
@@ -93,14 +103,26 @@ void play(){
 
     runMeteors();
 
+		runItems();
+
     checkGameover();
 
 		textSize(40);
 		textAlign(CENTER,CENTER);
+		fill(255);
 		text(player1.orbits, width/2, height/2);
 
 		debugMode();
   }
+}
+
+void runTimer(){ //universal timer that sets to true for one frame every second
+	if(pastSecond != second()){
+		pastSecond = second();
+		timer = true;
+	} else {
+		timer = false;
+	}
 }
 
 void runMeteors() {
@@ -121,13 +143,36 @@ void runMeteors() {
   }
 
 	//getting another meteor every so often
-	if(pastSecond != second()){
-		pastSecond = second();
+	if(timer){
 		meteorTimer++;
 	}
 	if(meteorTimer >= 30){
 		meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
 		meteorTimer = 0;
+	}
+}
+
+void runItems(){
+	for (int i = itemList.size() - 1; i >= 0; i--) {
+
+		itemList.get(i).run();
+
+		if (itemList.get(i).checkCollision(player1)) {
+			itemList.get(i).collected();
+			itemList.remove(i);
+
+		} else if (itemList.get(i).checkOutOfBounds()) {
+			itemList.remove(i);
+		}
+	}
+
+	//getting another item every so often
+	if(timer){
+		itemTimer++;
+	}
+	if(itemTimer >= 2){
+		itemList.add(new item((int)random(1,4),random(10,20),random(5,10),(int)random(1,5)));
+		itemTimer = 0;
 	}
 }
 
@@ -142,6 +187,10 @@ void reset() {
 
 	for (int i = meteorList.size() - 1; i >= 0; i--) {
 		meteorList.remove(i);
+	}
+
+	for (int i = itemList.size() - 1; i >= 0; i--) {
+		itemList.remove(i);
 	}
 }
 
