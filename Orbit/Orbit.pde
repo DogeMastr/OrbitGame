@@ -167,12 +167,8 @@ void runItems(){
 	}
 
 	//getting another item every so often
-	if(timer){
-		itemTimer++;
-	}
-	if(itemTimer >= 2){
+	if(itemList.size() < 1){
 		itemList.add(new item((int)random(1,4),random(10,20),random(5,10),(int)random(1,5)));
-		itemTimer = 0;
 	}
 }
 

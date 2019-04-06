@@ -183,12 +183,8 @@ public void runItems(){
 	}
 
 	//getting another item every so often
-	if(timer){
-		itemTimer++;
-	}
-	if(itemTimer >= 2){
+	if(itemList.size() < 1){
 		itemList.add(new item((int)random(1,4),random(10,20),random(5,10),(int)random(1,5)));
-		itemTimer = 0;
 	}
 }
 
@@ -295,7 +291,7 @@ class item{
 
 
 	/*
-		itemList.add(new item(random(int)(1,4),random(10,20),random(5,10),random(int)(1,5)));
+		itemList.add(new item((int)random(1,4),random(10,20),random(5,10),(int)random(1,5)));
   */
 
 	item(float _pos, float _r, float _s, int _type) {
@@ -348,7 +344,7 @@ class item{
 	}
 
 	public void display() {
-		fill(255,127,0);
+		fill(255,170,0);
 		ellipse(x, y, radius, radius);
 		if(debug){
 			textAlign(CENTER, TOP);
@@ -389,8 +385,10 @@ class item{
 	//checks the type and does the stuff that its ment to do
 		if(type == 1){
 		//gives a point
+			player1.addScore(1);
 		} else if (type == 2) {
 		//gives 2 points
+			player1.addScore(2);
 		} else if (type == 3) {
 		//removes all asteroids
 		} else if (type == 4) {
