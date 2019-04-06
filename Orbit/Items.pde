@@ -18,7 +18,7 @@ class item{
 
 
 	/*
-itemList.add(new item(random(int)(1,4),random(10,20),random(5,10),random(int)(1,5)));
+		itemList.add(new item(random(int)(1,4),random(10,20),random(5,10),random(int)(1,5)));
   */
 
 	item(float _pos, float _r, float _s, int _type) {

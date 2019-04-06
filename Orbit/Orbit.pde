@@ -138,7 +138,7 @@ void runMeteors() {
     }
 
 		if (meteorList.get(i).checkNMissCollision(player1)){
-			player1.addScore();
+			player1.addScore(1);
 		}
   }
 

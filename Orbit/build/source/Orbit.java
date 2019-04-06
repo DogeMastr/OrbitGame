@@ -125,6 +125,7 @@ public void play(){
 
 		textSize(40);
 		textAlign(CENTER,CENTER);
+		fill(255);
 		text(player1.orbits, width/2, height/2);
 
 		debugMode();
@@ -153,7 +154,7 @@ public void runMeteors() {
     }
 
 		if (meteorList.get(i).checkNMissCollision(player1)){
-			player1.addScore();
+			player1.addScore(1);
 		}
   }
 
@@ -294,7 +295,7 @@ class item{
 
 
 	/*
-itemList.add(new item(random(int)(1,4),random(10,20),random(5,10),random(int)(1,5)));
+		itemList.add(new item(random(int)(1,4),random(10,20),random(5,10),random(int)(1,5)));
   */
 
 	item(float _pos, float _r, float _s, int _type) {
@@ -526,7 +527,9 @@ class player {
   int orbits; //score
   boolean scorecounting;
 
-	boolean showPlusOne;
+	boolean showPlusNumber;
+	int points; //the number for the +1 thing so it can show more than one number
+
 	float plusX;
 	float plusY;
 	int fade;
@@ -541,7 +544,7 @@ class player {
 
     orbits = 0;
 
-		showPlusOne = false;
+		showPlusNumber = false;
 
 		fade = 255;
 
@@ -552,7 +555,7 @@ class player {
     move();
     display();
     countOrbits();
-		plusOne();
+		plusNumber();
   }
 
   public void move() {
@@ -574,7 +577,7 @@ class player {
   public void countOrbits() {
     if (x > width/2 && y < height/2 && scorecounting == false) {
       println("scorecounted");
-      addScore();
+      addScore(1);
       scorecounting = true;
     } else if (y > height/2) {
       scorecounting = false;
@@ -589,24 +592,25 @@ class player {
     }
   }
 
-	public void addScore(){
-		orbits++;
-		showPlusOne = true;
+	public void addScore(int _points){
+		points = _points;
+		orbits = orbits + points;
+		showPlusNumber = true;
 		fade = 255;
 		plusX = x + radius;
 		plusY = y + radius;
 	}
 
-	public void plusOne() {
-	  if (showPlusOne) {
+	public void plusNumber() {
+	  if (showPlusNumber) {
 
 	    fill(255, 255, 255, fade);
 	    textSize(20);
 
-	    text("+1", plusX, plusY);
+	    text("+" + points, plusX, plusY);
 
 	    if (fade < 0) {
-	      showPlusOne = false;
+	      showPlusNumber = false;
 				fade = 255;
 	    } else {
 	      fade = fade - 5;
