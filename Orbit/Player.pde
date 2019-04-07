@@ -12,12 +12,12 @@ class player {
   int orbits; //score
   boolean scorecounting;
 
-	boolean showPlusNumber;
-	int points; //the number for the +1 thing so it can show more than one number
+  boolean showPlusNumber;
+  int points; //the number for the +1 thing so it can show more than one number
 
-	float plusX;
-	float plusY;
-	int fade;
+  float plusX;
+  float plusY;
+  int fade;
   player() {
     centerX = width/2;
     centerY = height/2;
@@ -29,9 +29,9 @@ class player {
 
     orbits = 0;
 
-		showPlusNumber = false;
+    showPlusNumber = false;
 
-		fade = 255;
+    fade = 255;
 
     //println("init: "+ this);
   }
@@ -40,7 +40,7 @@ class player {
     move();
     display();
     countOrbits();
-		plusNumber();
+    plusNumber();
   }
 
   void move() {
@@ -55,7 +55,7 @@ class player {
   }
 
   void display() {
-    fill(18,231,18);
+    fill(18, 231, 18);
     ellipse(x, y, radius, radius);
   }
 
@@ -77,30 +77,30 @@ class player {
     }
   }
 
-	void addScore(int _points){
-		points = _points;
-		orbits = orbits + points;
-		showPlusNumber = true;
-		fade = 255;
-		plusX = x + radius;
-		plusY = y + radius;
-	}
+  void addScore(int _points) {
+    points = _points;
+    orbits = orbits + points;
+    showPlusNumber = true;
+    fade = 255;
+    plusX = x + radius;
+    plusY = y + radius;
+  }
 
-	void plusNumber() {
-	  if (showPlusNumber) {
+  void plusNumber() {
+    if (showPlusNumber) {
 
-	    fill(255, 255, 255, fade);
-	    textSize(20);
+      fill(255, 255, 255, fade);
+      textSize(20);
 
-	    text("+" + points, plusX, plusY);
+      text("+" + points, plusX, plusY);
 
-	    if (fade < 0) {
-	      showPlusNumber = false;
-				fade = 255;
-	    } else {
-	      fade = fade - 5;
-	      plusY = plusY - 2;
-	    }
-	  }
-	}
+      if (fade < 0) {
+        showPlusNumber = false;
+        fade = 255;
+      } else {
+        fade = fade - 5;
+        plusY = plusY - 2;
+      }
+    }
+  }
 }

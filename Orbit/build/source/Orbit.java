@@ -67,134 +67,132 @@ public void setup() {
 
   meteorList = new ArrayList<meteor>();
 
-	itemList = new ArrayList<item>();
+  itemList = new ArrayList<item>();
 
   scores = loadStrings("data/Scores.txt");
 
-	topScore = PApplet.parseInt(scores[0]);
-	secondScore = PApplet.parseInt(scores[1]);
-	thirdScore = PApplet.parseInt(scores[2]);
+  topScore = PApplet.parseInt(scores[0]);
+  secondScore = PApplet.parseInt(scores[1]);
+  thirdScore = PApplet.parseInt(scores[2]);
 
-	topName = scores[4];
-	secondName = scores[5];
-	thirdName = scores[6];
+  topName = scores[4];
+  secondName = scores[5];
+  thirdName = scores[6];
 
-	currentString = scores[4];
+  currentString = scores[4];
 
-	meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
+  meteorList.add(new meteor((int)random(1, 5), (int)random(10, 20), (int)random(5, 10)));
 
-	menu = true;
-	debug = false;
+  menu = true;
+  debug = false;
 
-	framerate = 60;
-	frameRate(framerate);
+  framerate = 60;
+  frameRate(framerate);
 }
 
 public void draw() {
   background(0, 0, 85);
-	if(menu){
-		menu();
-	} else {
-		play();
-	}
-}
-
-public void menu(){
-	//draws the main menu, displays highscore & can activate debug mode
-	text("Click to move!",width/2,height/6);
-	text("Press any key to start!", width/2, (height/6)*2);
-
-	text(currentString + ": " + topScore, width/2, (height/6)*3.5f);
-	text(secondName + ": " + secondScore, width/2, (height/6)*4);
-	text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5f);
-
-	if(keyPressed){
-		if(key == 'b'){
-			debug = true;
-			menu = false;
-		} else {
-			menu = false;
-		}
-	}
-}
-
-public void play(){
-	if (gameover == true) {
-    //you died
-		if (player1.orbits >= topScore) { // you got the highest score
-			if(!scoreChanged){
-				thirdScore = secondScore; //moves the other scores down to the top score is now the second one
-				thirdName = secondName;
-
-				secondScore = topScore;
-				secondName = topName;
-
-				topScore = player1.orbits;
-				scoreChanged = true; //the scores have been changed
-			}
-
-			text("You got the top score!", width/2, height/6);
-
-			text(currentString + ": " + topScore, width/2, (height/6)*3.5f);
-			text(secondName + ": " + secondScore, width/2, (height/6)*4);
-			text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5f);
-			startedTyping = true;
-			if(startedTyping == false || keyPressed && key == ENTER){ //finished typing
-				topName = currentString;
-				reset();
-			}
-    } else if (player1.orbits >= secondScore) { // you got the second  highest score
-			if(!scoreChanged){
-				thirdScore = secondScore; //moves the other scores down to the top score is now the second one
-				thirdName = secondName;
-
-				secondScore = player1.orbits;
-				scoreChanged = true;
-			}
-
-			text("You got the second top score!", width/2, height/6);
-
-			text(topName + ": " + topScore, width/2, (height/6)*3.5f);
-			text(currentString + ": " + player1.orbits, width/2, (height/6)*4);
-			text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5f);
-			startedTyping = true;
-			if(startedTyping == false || keyPressed && key == ENTER){ //finished typing
-				secondName = currentString;
-				reset();
-			}
-		} else if (player1.orbits >= thirdScore) { // you got the second  highest score
-			if(!scoreChanged){
-	      thirdScore = player1.orbits;
-				scoreChanged = true;
-			}
-
-			text("You got the third top score!", width/2, height/6);
-
-			text(topName + ": " + topScore, width/2, (height/6)*3.5f);
-			text(secondName + ": " + secondScore, width/2, (height/6)*4);
-			text(currentString+ ": " + player1.orbits, width/2, (height/6)*4.5f);
-			startedTyping = true;
-			if(startedTyping == false || keyPressed && key == ENTER){ //finished typing
-				thirdName = currentString;
-				reset();
-			}
-		} else { // you didnt get a top score
-			textAlign(CENTER, TOP);
-			textSize(40);
-    	text("Gameover!", width/2, height/6);
-    	text("Score: "+player1.orbits, width/2, (height/6)*2);
-    	text(topName + ": " + topScore, width/2, (height/6)*3.5f);
-    	text(secondName + ": " + secondScore, width/2, (height/6)*4);
-    	text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5f);
-			if (keyPressed) {
-				reset();
-			}
-		}
-
-
+  if (menu) {
+    menu();
   } else {
-		//ye still be playin
-		runTimer();
+    play();
+  }
+}
+
+public void menu() {
+  //draws the main menu, displays highscore & can activate debug mode
+  text("Click to move!", width/2, height/6);
+  text("Press any key to start!", width/2, (height/6)*2);
+
+  text(currentString + ": " + topScore, width/2, (height/6)*3.5f);
+  text(secondName + ": " + secondScore, width/2, (height/6)*4);
+  text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5f);
+
+  if (keyPressed) {
+    if (key == 'b') {
+      debug = true;
+      menu = false;
+    } else {
+      menu = false;
+    }
+  }
+}
+
+public void play() {
+  if (gameover == true) {
+    //you died
+    if (player1.orbits >= topScore) { // you got the highest score
+      if (!scoreChanged) {
+        thirdScore = secondScore; //moves the other scores down to the top score is now the second one
+        thirdName = secondName;
+
+        secondScore = topScore;
+        secondName = topName;
+
+        topScore = player1.orbits;
+        scoreChanged = true; //the scores have been changed
+      }
+
+      text("You got the top score!", width/2, height/6);
+
+      text(currentString + ": " + topScore, width/2, (height/6)*3.5f);
+      text(secondName + ": " + secondScore, width/2, (height/6)*4);
+      text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5f);
+      startedTyping = true;
+      if (startedTyping == false || keyPressed && key == ENTER) { //finished typing
+        topName = currentString;
+        reset();
+      }
+    } else if (player1.orbits >= secondScore) { // you got the second  highest score
+      if (!scoreChanged) {
+        thirdScore = secondScore; //moves the other scores down to the top score is now the second one
+        thirdName = secondName;
+
+        secondScore = player1.orbits;
+        scoreChanged = true;
+      }
+
+      text("You got the second top score!", width/2, height/6);
+
+      text(topName + ": " + topScore, width/2, (height/6)*3.5f);
+      text(currentString + ": " + player1.orbits, width/2, (height/6)*4);
+      text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5f);
+      startedTyping = true;
+      if (startedTyping == false || keyPressed && key == ENTER) { //finished typing
+        secondName = currentString;
+        reset();
+      }
+    } else if (player1.orbits >= thirdScore) { // you got the second  highest score
+      if (!scoreChanged) {
+        thirdScore = player1.orbits;
+        scoreChanged = true;
+      }
+
+      text("You got the third top score!", width/2, height/6);
+
+      text(topName + ": " + topScore, width/2, (height/6)*3.5f);
+      text(secondName + ": " + secondScore, width/2, (height/6)*4);
+      text(currentString+ ": " + player1.orbits, width/2, (height/6)*4.5f);
+      startedTyping = true;
+      if (startedTyping == false || keyPressed && key == ENTER) { //finished typing
+        thirdName = currentString;
+        reset();
+      }
+    } else { // you didnt get a top score
+      textAlign(CENTER, TOP);
+      textSize(40);
+      text("Gameover!", width/2, height/6);
+      text("Score: "+player1.orbits, width/2, (height/6)*2);
+      text(topName + ": " + topScore, width/2, (height/6)*3.5f);
+      text(secondName + ": " + secondScore, width/2, (height/6)*4);
+      text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5f);
+      if (keyPressed) {
+        reset();
+      }
+    }
+  } else {
+    //ye still be playin
+    runTimer();
 
     player1.run();
 
@@ -202,26 +200,26 @@ public void play(){
 
     runMeteors();
 
-		runItems();
+    runItems();
 
     checkGameover();
 
-		textSize(40);
-		textAlign(CENTER,CENTER);
-		fill(255);
-		text(player1.orbits, width/2, height/2);
+    textSize(40);
+    textAlign(CENTER, CENTER);
+    fill(255);
+    text(player1.orbits, width/2, height/2);
 
-		debugMode();
+    debugMode();
   }
 }
 
-public void runTimer(){ //universal timer that sets to true for one frame every second
-	if(pastSecond != second()){
-		pastSecond = second();
-		timer = true;
-	} else {
-		timer = false;
-	}
+public void runTimer() { //universal timer that sets to true for one frame every second
+  if (pastSecond != second()) {
+    pastSecond = second();
+    timer = true;
+  } else {
+    timer = false;
+  }
 }
 
 public void runMeteors() {
@@ -233,42 +231,41 @@ public void runMeteors() {
       gameover = true;
     } else if (meteorList.get(i).checkOutOfBounds()) {
       meteorList.remove(i);
-      meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
+      meteorList.add(new meteor((int)random(1, 5), (int)random(10, 20), (int)random(5, 10)));
     }
 
-		if (meteorList.get(i).checkNMissCollision(player1)){
-			player1.addScore(1);
-		}
+    if (meteorList.get(i).checkNMissCollision(player1)) {
+      player1.addScore(1);
+    }
   }
 
-	//getting another meteor every so often
-	if(timer){
-		meteorTimer++;
-	}
-	if(meteorTimer >= 30){
-		meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
-		meteorTimer = 0;
-	}
+  //getting another meteor every so often
+  if (timer) {
+    meteorTimer++;
+  }
+  if (meteorTimer >= 30) {
+    meteorList.add(new meteor((int)random(1, 5), (int)random(10, 20), (int)random(5, 10)));
+    meteorTimer = 0;
+  }
 }
 
-public void runItems(){
-	for (int i = itemList.size() - 1; i >= 0; i--) {
+public void runItems() {
+  for (int i = itemList.size() - 1; i >= 0; i--) {
 
-		itemList.get(i).run();
+    itemList.get(i).run();
 
-		if (itemList.get(i).checkCollision(player1)) {
-			itemList.get(i).collected();
-			itemList.remove(i);
+    if (itemList.get(i).checkCollision(player1)) {
+      itemList.get(i).collected();
+      itemList.remove(i);
+    } else if (itemList.get(i).checkOutOfBounds()) {
+      itemList.remove(i);
+    }
+  }
 
-		} else if (itemList.get(i).checkOutOfBounds()) {
-			itemList.remove(i);
-		}
-	}
-
-	//getting another item every so often
-	if(itemList.size() < 1){
-		itemList.add(new item((int)random(1,4),random(10,20),random(5,10),(int)random(1,5)));
-	}
+  //getting another item every so often
+  if (itemList.size() < 1) {
+    itemList.add(new item((int)random(1, 4), random(10, 20), random(5, 10), (int)random(1, 5)));
+  }
 }
 
 public void checkGameover() {
@@ -279,64 +276,64 @@ public void checkGameover() {
 
 public void reset() {
   player1 = new player();
-	startedTyping = false;
-	currentString = "enter your name";
-	gameover = false;
-	scoreChanged = false;
+  startedTyping = false;
+  currentString = "enter your name";
+  gameover = false;
+  scoreChanged = false;
 
-	for (int i = meteorList.size() - 1; i >= 0; i--) {
-		meteorList.remove(i);
-	}
+  for (int i = meteorList.size() - 1; i >= 0; i--) {
+    meteorList.remove(i);
+  }
 
-	for (int i = itemList.size() - 1; i >= 0; i--) {
-		itemList.remove(i);
-	}
+  for (int i = itemList.size() - 1; i >= 0; i--) {
+    itemList.remove(i);
+  }
 
-	meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
+  meteorList.add(new meteor((int)random(1, 5), (int)random(10, 20), (int)random(5, 10)));
 }
 
-public void debugMode(){
-	if(debug){
-		textAlign(LEFT,BOTTOM);
-		textSize(20);
-		text("Debug: "+ debug,0,20);
-		text("Metors: "+meteorList.size(),0,40);
-		text("Distance: "+player1.orbitRadius,0,60);
-		text("framerate: " + framerate, 0,80);
-		text("meteor timer: " + meteorTimer, 0,100);
-		text("blackhole timer: " + holeTimer, 0,100);
-		if(mousePressed){
-			if(mouseButton == 3){
-				slowmode = !slowmode;
-			}
-		}
-		if(slowmode){
-			framerate = 10;
-			frameRate(framerate);
-		} else {
-			framerate = 60;
-			frameRate(framerate);
-		}
-	}
+public void debugMode() {
+  if (debug) {
+    textAlign(LEFT, BOTTOM);
+    textSize(20);
+    text("Debug: "+ debug, 0, 20);
+    text("Metors: "+meteorList.size(), 0, 40);
+    text("Distance: "+player1.orbitRadius, 0, 60);
+    text("framerate: " + framerate, 0, 80);
+    text("meteor timer: " + meteorTimer, 0, 100);
+    text("blackhole timer: " + holeTimer, 0, 100);
+    if (mousePressed) {
+      if (mouseButton == 3) {
+        slowmode = !slowmode;
+      }
+    }
+    if (slowmode) {
+      framerate = 10;
+      frameRate(framerate);
+    } else {
+      framerate = 60;
+      frameRate(framerate);
+    }
+  }
 }
 
 public void keyTyped() {
-	if(startedTyping){
-  	if (key == BACKSPACE && currentString.length() > 0) {
-    	currentString = currentString.substring(0, currentString.length()-1);
-  	} else if (key == BACKSPACE) {
-  	} else if (key == ENTER) {
-			startedTyping = false; //finished typing
-			println("finsihed Typing");
-		} else {
-    	currentString += key;
-  	}
-	}
+  if (startedTyping) {
+    if (key == BACKSPACE && currentString.length() > 0) {
+      currentString = currentString.substring(0, currentString.length()-1);
+    } else if (key == BACKSPACE) {
+    } else if (key == ENTER) {
+      startedTyping = false; //finished typing
+      println("finsihed Typing");
+    } else {
+      currentString += key;
+    }
+  }
 }
 
 public void exit() {
-	saveStrings("data/Scores.txt", scores);
-	super.exit();
+  saveStrings("data/Scores.txt", scores);
+  super.exit();
 }
 class blackhole {
   float x;
@@ -353,153 +350,30 @@ class blackhole {
 
   public void run() {
     display();
-		getBigger();
+    getBigger();
   }
 
   public void display() {
-		fill(0);
+    fill(0);
     ellipse(x, y, radius*2, radius*2);
   }
 
-	public void getBigger(){ //makes the blackhole bigger when u have more than 40 points
-		if(pastSecond != second()){
-			holeTimer++;
-		}
-		if(holeTimer >= 10 && player1.orbits > 40){
-			radius += 0.1f;
-			holeTimer = 0;
-		}
-	}
+  public void getBigger() { //makes the blackhole bigger when u have more than 40 points
+    if (pastSecond != second()) {
+      holeTimer++;
+    }
+    if (holeTimer >= 10 && player1.orbits > 40) {
+      radius += 0.1f;
+      holeTimer = 0;
+    }
+  }
 }
-class item{
-	/*
+class item {
+  /*
 		Items are the same as metoers but its good if you hit them
-	*/
+   	*/
 
-	int type; //ummmmmmm yes
-
-	float x;
-	float y;
-	float radius;
-	float pos;
-
-	float speed;
-	float rotation;
-
-	float xMoveSpeed;
-	float yMoveSpeed;
-
-
-	/*
-		itemList.add(new item((int)random(1,4),random(10,20),random(5,10),(int)random(1,5)));
-  */
-
-	item(float _pos, float _r, float _s, int _type) {
-
-		radius = _r/2;
-		pos = _pos;
-
-		speed = _s;
-
-		initRotation();
-
-		type = _type;
-
-		//println("init: "+ this);
-	}
-
-	public void initRotation() {
-		if(pos == 1){
-			rotation = random(0.523599f,2.094395f);
-
-			x = -60;
-			y = random(-60, height + 60);
-
-		} else if(pos == 2){
-			rotation = random(2.094395f,3.665191f);
-
-			x = width + 60;
-			y = random(-60, height + 60);
-
-		} else if(pos == 3){
-			rotation = random(3.665191f,5.235988f);
-
-			x = random(-60, width + 60);
-			y = width + 60;
-
-		} else {
-			rotation = random(5.235988f,6.806784f);
-
-			x = random(-60, width + 60);
-			y = -60;
-		}
-
-			yMoveSpeed = speed*cos(rotation);
-			xMoveSpeed = speed*sin(rotation);
-	}
-
-	public void run() {
-		display();
-		move();
-	}
-
-	public void display() {
-		fill(255,170,0);
-		ellipse(x, y, radius, radius);
-		if(debug){
-			textAlign(CENTER, TOP);
-			textSize(20);
-			text(rotation,x,y+radius);
-		}
-	}
-
-	public void move() {
-		x += xMoveSpeed;
-		y += yMoveSpeed;
-	}
-
-	public boolean checkCollision(player e) {
-		if (dist(x, y, e.x, e.y) < e.radius/2 + radius) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean checkOutOfBounds() {
-		if (x > width + radius * 6) {
-			return true;
-		} else if (x < 0 - radius * 6) {
-			return true;
-		} else if (y > height + radius * 6) {
-			return true;
-		} else if (y < 0 - radius * 6) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-
-	public void collected(){
-	//checks the type and does the stuff that its ment to do
-		if(type == 1){
-		//gives a point
-			player1.addScore(1);
-		} else if (type == 2) {
-		//gives 2 points
-			player1.addScore(2);
-		} else if (type == 3) {
-		//removes all asteroids
-		} else if (type == 4) {
-		//
-		} else if (type == 5) {
-			}else {
-		//lmao what
-		}
-	}
-}
-	class meteor {
+  int type; //ummmmmmm yes
 
   float x;
   float y;
@@ -512,10 +386,12 @@ class item{
   float xMoveSpeed;
   float yMoveSpeed;
 
-	boolean missed; //can only be near missed once
 
-  // meteor(random(int)(1,4),random(10,20),random(5,10));
-  meteor(float _pos, float _r, float _s) {
+  /*
+		itemList.add(new item((int)random(1,4),random(10,20),random(5,10),(int)random(1,5)));
+   */
+
+  item(float _pos, float _r, float _s, int _type) {
 
     radius = _r/2;
     pos = _pos;
@@ -524,39 +400,36 @@ class item{
 
     initRotation();
 
-		missed = false;
+    type = _type;
 
     //println("init: "+ this);
   }
 
   public void initRotation() {
-    if(pos == 1){
-			rotation = random(0.523599f,2.094395f);
+    if (pos == 1) {
+      rotation = random(0.523599f, 2.094395f);
 
-			x = -60;
-			y = random(-60, height + 60);
+      x = -60;
+      y = random(-60, height + 60);
+    } else if (pos == 2) {
+      rotation = random(2.094395f, 3.665191f);
 
-    } else if(pos == 2){
-      rotation = random(2.094395f,3.665191f);
+      x = width + 60;
+      y = random(-60, height + 60);
+    } else if (pos == 3) {
+      rotation = random(3.665191f, 5.235988f);
 
-			x = width + 60;
-			y = random(-60, height + 60);
-
-    } else if(pos == 3){
-			rotation = random(3.665191f,5.235988f);
-
-			x = random(-60, width + 60);
-			y = width + 60;
-
+      x = random(-60, width + 60);
+      y = width + 60;
     } else {
-			rotation = random(5.235988f,6.806784f);
+      rotation = random(5.235988f, 6.806784f);
 
-			x = random(-60, width + 60);
-			y = -60;
+      x = random(-60, width + 60);
+      y = -60;
     }
 
-      yMoveSpeed = speed*cos(rotation);
-      xMoveSpeed = speed*sin(rotation);
+    yMoveSpeed = speed*cos(rotation);
+    xMoveSpeed = speed*sin(rotation);
   }
 
   public void run() {
@@ -565,13 +438,13 @@ class item{
   }
 
   public void display() {
-		fill(219,49,49);
+    fill(255, 170, 0);
     ellipse(x, y, radius, radius);
-		if(debug){
-  		textAlign(CENTER, TOP);
-			textSize(20);
-			text(rotation,x,y+radius);
-		}
+    if (debug) {
+      textAlign(CENTER, TOP);
+      textSize(20);
+      text(rotation, x, y+radius);
+    }
   }
 
   public void move() {
@@ -587,10 +460,128 @@ class item{
     }
   }
 
-	public boolean checkNMissCollision(player e) {
-		//returns true if u are close to one
+  public boolean checkOutOfBounds() {
+    if (x > width + radius * 6) {
+      return true;
+    } else if (x < 0 - radius * 6) {
+      return true;
+    } else if (y > height + radius * 6) {
+      return true;
+    } else if (y < 0 - radius * 6) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+  public void collected() {
+    //checks the type and does the stuff that its ment to do
+    if (type == 1) {
+      //gives a point
+      player1.addScore(1);
+    } else if (type == 2) {
+      //gives 2 points
+      player1.addScore(2);
+    } else if (type == 3) {
+      //removes all asteroids
+    } else if (type == 4) {
+      //
+    } else if (type == 5) {
+    } else {
+      //lmao what
+    }
+  }
+}
+class meteor {
+
+  float x;
+  float y;
+  float radius;
+  float pos;
+
+  float speed;
+  float rotation;
+
+  float xMoveSpeed;
+  float yMoveSpeed;
+
+  boolean missed; //can only be near missed once
+
+  // meteor(random(int)(1,4),random(10,20),random(5,10));
+  meteor(float _pos, float _r, float _s) {
+
+    radius = _r/2;
+    pos = _pos;
+
+    speed = _s;
+
+    initRotation();
+
+    missed = false;
+
+    //println("init: "+ this);
+  }
+
+  public void initRotation() {
+    if (pos == 1) {
+      rotation = random(0.523599f, 2.094395f);
+
+      x = -60;
+      y = random(-60, height + 60);
+    } else if (pos == 2) {
+      rotation = random(2.094395f, 3.665191f);
+
+      x = width + 60;
+      y = random(-60, height + 60);
+    } else if (pos == 3) {
+      rotation = random(3.665191f, 5.235988f);
+
+      x = random(-60, width + 60);
+      y = width + 60;
+    } else {
+      rotation = random(5.235988f, 6.806784f);
+
+      x = random(-60, width + 60);
+      y = -60;
+    }
+
+    yMoveSpeed = speed*cos(rotation);
+    xMoveSpeed = speed*sin(rotation);
+  }
+
+  public void run() {
+    display();
+    move();
+  }
+
+  public void display() {
+    fill(219, 49, 49);
+    ellipse(x, y, radius, radius);
+    if (debug) {
+      textAlign(CENTER, TOP);
+      textSize(20);
+      text(rotation, x, y+radius);
+    }
+  }
+
+  public void move() {
+    x += xMoveSpeed;
+    y += yMoveSpeed;
+  }
+
+  public boolean checkCollision(player e) {
+    if (dist(x, y, e.x, e.y) < e.radius/2 + radius) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean checkNMissCollision(player e) {
+    //returns true if u are close to one
     if (dist(x, y, e.x, e.y) < e.radius/2 + radius + 20 && !missed) {
-			missed = true;
+      missed = true;
       return true;
     } else {
       return false;
@@ -625,12 +616,12 @@ class player {
   int orbits; //score
   boolean scorecounting;
 
-	boolean showPlusNumber;
-	int points; //the number for the +1 thing so it can show more than one number
+  boolean showPlusNumber;
+  int points; //the number for the +1 thing so it can show more than one number
 
-	float plusX;
-	float plusY;
-	int fade;
+  float plusX;
+  float plusY;
+  int fade;
   player() {
     centerX = width/2;
     centerY = height/2;
@@ -642,9 +633,9 @@ class player {
 
     orbits = 0;
 
-		showPlusNumber = false;
+    showPlusNumber = false;
 
-		fade = 255;
+    fade = 255;
 
     //println("init: "+ this);
   }
@@ -653,7 +644,7 @@ class player {
     move();
     display();
     countOrbits();
-		plusNumber();
+    plusNumber();
   }
 
   public void move() {
@@ -668,7 +659,7 @@ class player {
   }
 
   public void display() {
-    fill(18,231,18);
+    fill(18, 231, 18);
     ellipse(x, y, radius, radius);
   }
 
@@ -690,32 +681,32 @@ class player {
     }
   }
 
-	public void addScore(int _points){
-		points = _points;
-		orbits = orbits + points;
-		showPlusNumber = true;
-		fade = 255;
-		plusX = x + radius;
-		plusY = y + radius;
-	}
+  public void addScore(int _points) {
+    points = _points;
+    orbits = orbits + points;
+    showPlusNumber = true;
+    fade = 255;
+    plusX = x + radius;
+    plusY = y + radius;
+  }
 
-	public void plusNumber() {
-	  if (showPlusNumber) {
+  public void plusNumber() {
+    if (showPlusNumber) {
 
-	    fill(255, 255, 255, fade);
-	    textSize(20);
+      fill(255, 255, 255, fade);
+      textSize(20);
 
-	    text("+" + points, plusX, plusY);
+      text("+" + points, plusX, plusY);
 
-	    if (fade < 0) {
-	      showPlusNumber = false;
-				fade = 255;
-	    } else {
-	      fade = fade - 5;
-	      plusY = plusY - 2;
-	    }
-	  }
-	}
+      if (fade < 0) {
+        showPlusNumber = false;
+        fade = 255;
+      } else {
+        fade = fade - 5;
+        plusY = plusY - 2;
+      }
+    }
+  }
 }
   public void settings() {  size(800, 800); }
   static public void main(String[] passedArgs) {
