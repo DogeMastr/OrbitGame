@@ -79,7 +79,7 @@ public void setup() {
   secondName = scores[5];
   thirdName = scores[6];
 
-  currentString = scores[4];
+  currentString = "Enter your name";
 
   meteorList.add(new meteor((int)random(1, 5), (int)random(10, 20), (int)random(5, 10)));
 
@@ -104,7 +104,7 @@ public void menu() {
   text("Click to move!", width/2, height/6);
   text("Press any key to start!", width/2, (height/6)*2);
 
-  text(currentString + ": " + topScore, width/2, (height/6)*3.5f);
+  text(topName + ": " + topScore, width/2, (height/6)*3.5f);
   text(secondName + ": " + secondScore, width/2, (height/6)*4);
   text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5f);
 
@@ -277,7 +277,7 @@ public void checkGameover() {
 public void reset() {
   player1 = new player();
   startedTyping = false;
-  currentString = "enter your name";
+  currentString = "Enter your name";
   gameover = false;
   scoreChanged = false;
 
@@ -331,9 +331,20 @@ public void keyTyped() {
   }
 }
 
+public void saveScores(){
+	scores[0] = str(topScore);
+	scores[1] = str(secondScore);
+	scores[2] = str(thirdScore);
+
+	scores[4] = topName;
+	scores[5] = secondName;
+	scores[6] = thirdName;
+	saveStrings("data/Scores.txt", scores);
+}
+
 public void exit() {
-  saveStrings("data/Scores.txt", scores);
-  super.exit();
+	saveScores();
+	super.exit();
 }
 class blackhole {
   float x;
