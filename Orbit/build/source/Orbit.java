@@ -123,9 +123,11 @@ public void play(){
 			text("Enter your name", width/2, height/2);
 			text(currentString + ": "+player1.orbits,width/2,(height/3)*2);
 			startedTyping = true;
-			typing();
-			if(startedTyping == false){
+			if(startedTyping == false || key == ENTER){ //finished typing
 				topName = currentString;
+				gameover = false;
+				reset();
+				meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
 			}
     } else {
 			textAlign(CENTER, TOP);
@@ -133,13 +135,13 @@ public void play(){
     	text("Gameover!", width/2, height/3);
     	text("Score: "+player1.orbits, width/2, height/2);
     	text("Highscore: " + topScore, width/2, (height/3)*2); //replace showing the top 3
+			if (keyPressed) {
+				gameover = false;
+				reset();
+				meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
+			}
 		}
 
-		if (keyPressed && !startedTyping) {
-      gameover = false;
-      reset();
-			meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
-		}
 
   } else {
 		//ye still be playin
@@ -263,56 +265,18 @@ public void debugMode(){
 	}
 }
 
-public void typing(){
+public void keyTyped() {
 	if(startedTyping){
-		println(key);
-
-		if(keyPressed){
-
-			if(key == BACKSPACE){
-				if(currentString.length() > 1){ //if there is contence in the string
-					currentString = currentString.substring(0, max(0, currentString.length()-1));
-				}
-
-			} else if(key == ENTER){ //if enter is pressed
-				startedTyping = false; //ends typing & continues the program
-			}
-
-			else if(currentString.charAt(currentString.length()-1) != key || das || dasTimer == 0) { //if any other key but the last one that was pressed is pressed OR das
-				currentString += key; //types key
-			}
-
-			else if(currentString.charAt(currentString.length()-1) == key ){
-				dasTimer++;
-				if(dasTimer > 20){
-					das = true;
-				}
-			}
-
-		} else { //no key pressed
-			dasTimer = 0;
-			das = false;
-		}
+  	if (key == BACKSPACE && currentString.length() > 0) {
+    	currentString = currentString.substring(0, currentString.length()-1);
+  	} else if (key == BACKSPACE) {
+  	} else if (key == ENTER) {
+			startedTyping = false; //finished typing
+			println("finsihed Typing");
+		} else {
+    	currentString += key;
+  	}
 	}
-
-	/*
-		how DAS works
-		if you hold down a button for a while it will type it, wait for like half a second
-		and then it would spam the key
-
-		test area: aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
-		sudo code:
-		if same key held down
-			dasTimer++
-
-		if dasTimer > 20 //waits 20 frames before spamming
-			das = true
-
-		if other key pressed
-			dasTimer = 0
-			type that key
-	*/
 }
 
 public void exit() {
