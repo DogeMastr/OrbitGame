@@ -25,7 +25,7 @@ class blackhole {
     if (pastSecond != second()) {
       holeTimer++;
     }
-    if (holeTimer >= 10 && player1.orbits > 40) {
+    if (holeTimer >= 10 && player1.orbits > 40) { //every 10 seconds you have more than 40 points the blackhole slowly gets bigger, making the game harder
       radius += 0.1;
       holeTimer = 0;
     }

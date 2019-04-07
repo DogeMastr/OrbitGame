@@ -11,7 +11,7 @@ class meteor {
   float xMoveSpeed;
   float yMoveSpeed;
 
-  boolean missed; //can only be near missed once
+  boolean missed; //can only be near missed once, worth a point
 
   // meteor(random(int)(1,4),random(10,20),random(5,10));
   meteor(float _pos, float _r, float _s) {
@@ -25,7 +25,7 @@ class meteor {
 
     missed = false;
 
-    //println("init: "+ this);
+    println("init: "+ this);
   }
 
   void initRotation() {

@@ -10,7 +10,7 @@ class player {
   float orbitRadius;
 
   int orbits; //score
-  boolean scorecounting;
+  boolean scorecounting; //if the player is in the scorecounting area (top left)
 
   boolean showPlusNumber;
   int points; //the number for the +1 thing so it can show more than one number
@@ -33,7 +33,7 @@ class player {
 
     fade = 255;
 
-    //println("init: "+ this);
+    println("init: "+ this);
   }
 
   void run() {
@@ -61,7 +61,6 @@ class player {
 
   void countOrbits() {
     if (x > width/2 && y < height/2 && scorecounting == false) {
-      println("scorecounted");
       addScore(1);
       scorecounting = true;
     } else if (y > height/2) {
@@ -78,15 +77,16 @@ class player {
   }
 
   void addScore(int _points) {
-    points = _points;
+    points = _points; //points is used for plusNumber()
     orbits = orbits + points;
     showPlusNumber = true;
     fade = 255;
     plusX = x + radius;
     plusY = y + radius;
+		println("scorecounted");
   }
 
-  void plusNumber() {
+  void plusNumber() { //the +1 animation that appears whenever you get a point
     if (showPlusNumber) {
 
       fill(255, 255, 255, fade);

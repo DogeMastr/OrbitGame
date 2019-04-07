@@ -1,27 +1,22 @@
 player player1;
-
 blackhole blackhole1;
-
 ArrayList<meteor> meteorList;
-
 ArrayList<item> itemList;
-
 boolean gameover = false;
+boolean menu; //true if you are on a menu, false if you are playing the game
+boolean startedTyping = false; //if you are typing
 
 //Scoring stuff
 String[] scores;
-
 int topScore;
 int secondScore;
 int thirdScore;
-
 String topName;
 String secondName;
 String thirdName;
-
 String currentString;
-
 boolean scoreChanged = false; //when the scores get pushed down it only happenes once
+
 //timing stuff
 int pastSecond;
 boolean timer;
@@ -29,15 +24,11 @@ int meteorTimer;
 int holeTimer;
 int itemTimer;
 
-boolean menu;
-
-boolean debug;
+//debug stuff
+boolean debug; //true if you  are in debug mode
 int framerate;
 boolean slowmode = false;
 
-boolean startedTyping = false;
-boolean das = false; //das = delayed auto shift, basicly stops the key being pressed every frame
-int dasTimer;
 
 void setup() {
   size(800, 800);
@@ -46,30 +37,25 @@ void setup() {
   textSize(40);
 
   player1 = new player();
-
   blackhole1 = new blackhole();
-
   meteorList = new ArrayList<meteor>();
-
   itemList = new ArrayList<item>();
 
   scores = loadStrings("data/Scores.txt");
-
   topScore = int(scores[0]);
   secondScore = int(scores[1]);
   thirdScore = int(scores[2]);
-
   topName = scores[4];
   secondName = scores[5];
   thirdName = scores[6];
 
   currentString = "Enter your name";
 
-  meteorList.add(new meteor((int)random(1, 5), (int)random(10, 20), (int)random(5, 10)));
+	meteorList.add(new meteor((int)random(1, 5), (int)random(10, 20), (int)random(5, 10)));
 
   menu = true;
-  debug = false;
 
+  debug = false;
   framerate = 60;
   frameRate(framerate);
 }
@@ -79,19 +65,19 @@ void draw() {
   if (menu) {
     menu();
   } else {
-    play();
+    play(); //no clue why play is that colour
   }
 }
 
 void menu() {
   //draws the main menu, displays highscore & can activate debug mode
+	textAlign(CENTER, TOP);
+	textSize(40);
   text("Click to move!", width/2, height/6);
   text("Press any key to start!", width/2, (height/6)*2);
-
   text(topName + ": " + topScore, width/2, (height/6)*3.5);
   text(secondName + ": " + secondScore, width/2, (height/6)*4);
   text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5);
-
   if (keyPressed) {
     if (key == 'b') {
       debug = true;
@@ -109,16 +95,14 @@ void play() {
       if (!scoreChanged) {
         thirdScore = secondScore; //moves the other scores down to the top score is now the second one
         thirdName = secondName;
-
         secondScore = topScore;
         secondName = topName;
-
         topScore = player1.orbits;
         scoreChanged = true; //the scores have been changed
       }
-
+			textAlign(CENTER, TOP);
+			textSize(40);
       text("You got the top score!", width/2, height/6);
-
       text(currentString + ": " + topScore, width/2, (height/6)*3.5);
       text(secondName + ": " + secondScore, width/2, (height/6)*4);
       text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5);
@@ -131,13 +115,12 @@ void play() {
       if (!scoreChanged) {
         thirdScore = secondScore; //moves the other scores down to the top score is now the second one
         thirdName = secondName;
-
         secondScore = player1.orbits;
         scoreChanged = true;
       }
-
+			textAlign(CENTER, TOP);
+			textSize(40);
       text("You got the second top score!", width/2, height/6);
-
       text(topName + ": " + topScore, width/2, (height/6)*3.5);
       text(currentString + ": " + player1.orbits, width/2, (height/6)*4);
       text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5);
@@ -151,9 +134,9 @@ void play() {
         thirdScore = player1.orbits;
         scoreChanged = true;
       }
-
+			textAlign(CENTER, TOP);
+			textSize(40);
       text("You got the third top score!", width/2, height/6);
-
       text(topName + ": " + topScore, width/2, (height/6)*3.5);
       text(secondName + ": " + secondScore, width/2, (height/6)*4);
       text(currentString+ ": " + player1.orbits, width/2, (height/6)*4.5);
@@ -177,22 +160,15 @@ void play() {
   } else {
     //ye still be playin
     runTimer();
-
     player1.run();
-
     blackhole1.run();
-
     runMeteors();
-
     runItems();
-
     checkGameover();
-
     textSize(40);
     textAlign(CENTER, CENTER);
     fill(255);
     text(player1.orbits, width/2, height/2);
-
     debugMode();
   }
 }
@@ -208,16 +184,13 @@ void runTimer() { //universal timer that sets to true for one frame every second
 
 void runMeteors() {
   for (int i = meteorList.size() - 1; i >= 0; i--) {
-
     meteorList.get(i).run();
-
     if (meteorList.get(i).checkCollision(player1)) {
       gameover = true;
     } else if (meteorList.get(i).checkOutOfBounds()) {
       meteorList.remove(i);
       meteorList.add(new meteor((int)random(1, 5), (int)random(10, 20), (int)random(5, 10)));
     }
-
     if (meteorList.get(i).checkNMissCollision(player1)) {
       player1.addScore(1);
     }
@@ -235,9 +208,7 @@ void runMeteors() {
 
 void runItems() {
   for (int i = itemList.size() - 1; i >= 0; i--) {
-
     itemList.get(i).run();
-
     if (itemList.get(i).checkCollision(player1)) {
       itemList.get(i).collected();
       itemList.remove(i);
@@ -265,14 +236,22 @@ void reset() {
   gameover = false;
   scoreChanged = false;
 
+	//resets timers
+	meteorTimer = 0;
+	itemTimer = 0;
+	holeTimer = 0;
+
+	//removes all meteors
   for (int i = meteorList.size() - 1; i >= 0; i--) {
     meteorList.remove(i);
   }
 
+	//removes all items
   for (int i = itemList.size() - 1; i >= 0; i--) {
     itemList.remove(i);
   }
 
+	//adds one meteor otherwise you would have to wait 30 seconds before the next one
   meteorList.add(new meteor((int)random(1, 5), (int)random(10, 20), (int)random(5, 10)));
 }
 
@@ -285,7 +264,7 @@ void debugMode() {
     text("Distance: "+player1.orbitRadius, 0, 60);
     text("framerate: " + framerate, 0, 80);
     text("meteor timer: " + meteorTimer, 0, 100);
-    text("blackhole timer: " + holeTimer, 0, 100);
+    text("blackhole timer: " + holeTimer, 0, 120);
     if (mousePressed) {
       if (mouseButton == 3) {
         slowmode = !slowmode;
@@ -319,11 +298,11 @@ void saveScores(){
 	scores[0] = str(topScore);
 	scores[1] = str(secondScore);
 	scores[2] = str(thirdScore);
-
 	scores[4] = topName;
 	scores[5] = secondName;
 	scores[6] = thirdName;
 	saveStrings("data/Scores.txt", scores);
+	println("Scores saved");
 }
 
 void exit() {

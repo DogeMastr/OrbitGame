@@ -1,7 +1,12 @@
 class item {
   /*
 		Items are the same as metoers but its good if you hit them
-   	*/
+
+		type 1 = +1 point
+		type 2 = +2 points
+
+		idk what type 3 - 5 are yet
+   */
 
   int type; //ummmmmmm yes
 
@@ -32,7 +37,7 @@ class item {
 
     type = _type;
 
-    //println("init: "+ this);
+    println("init: "+ this);
   }
 
   void initRotation() {
@@ -68,7 +73,7 @@ class item {
   }
 
   void display() {
-    fill(255, 170, 0);
+    fill(255, 170, 0); //change fill depending on type please
     ellipse(x, y, radius, radius);
     if (debug) {
       textAlign(CENTER, TOP);
@@ -114,7 +119,7 @@ class item {
       //gives 2 points
       player1.addScore(2);
     } else if (type == 3) {
-      //removes all asteroids
+      //
     } else if (type == 4) {
       //
     } else if (type == 5) {
