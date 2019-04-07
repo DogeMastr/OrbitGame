@@ -1,10 +1,10 @@
 54
+35
 26
-25
 
 Doge
-Doge4
-Doge2
+Doge
+Doge
 
 
 the first 3 lines are for the top scores

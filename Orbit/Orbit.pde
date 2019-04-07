@@ -1,3 +1,12 @@
+/*
+	Orbit - A doge game
+
+	Things I want to do
+		Gameover animation
+
+*/
+
+
 player player1;
 blackhole blackhole1;
 ArrayList<meteor> meteorList;
@@ -219,7 +228,7 @@ void runItems() {
 
   //getting another item every so often
   if (itemList.size() < 1) {
-    itemList.add(new item((int)random(1, 4), random(10, 20), random(5, 10), (int)random(1, 5)));
+    itemList.add(new item((int)random(1, 4), random(10, 20), random(5, 10), (int)random(1, 3)));
   }
 }
 
