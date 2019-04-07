@@ -1,10 +1,10 @@
-4
-2
-2
+54
+26
+25
 
-yyet
-Enter your 
-wowie every epic time
+Doge
+Doge4
+Doge2
 
 
 the first 3 lines are for the top scores
