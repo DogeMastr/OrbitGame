@@ -20,6 +20,8 @@ String secondName;
 String thirdName;
 
 String currentString;
+
+boolean scoreChanged = false; //when the scores get pushed down it only happenes once
 //timing stuff
 int pastSecond;
 boolean timer;
@@ -83,9 +85,12 @@ void draw() {
 
 void menu(){
 	//draws the main menu, displays highscore & can activate debug mode
-	text("Click to move!",width/2,height/5);
-	text("Press any key to start!", width/2, (height/5)*2);
-	text("Highsscore: "+ topScore, width/2, (height/5)*3);
+	text("Click to move!",width/2,height/6);
+	text("Press any key to start!", width/2, (height/6)*2);
+
+	text(currentString + ": " + topScore, width/2, (height/6)*3.5);
+	text(secondName + ": " + secondScore, width/2, (height/6)*4);
+	text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5);
 
 	if(keyPressed){
 		if(key == 'b'){
@@ -100,29 +105,73 @@ void menu(){
 void play(){
 	if (gameover == true) {
     //you died
-		if (player1.orbits >= topScore) {
-      topScore = player1.orbits;
+		if (player1.orbits >= topScore) { // you got the highest score
+			if(!scoreChanged){
+				thirdScore = secondScore; //moves the other scores down to the top score is now the second one
+				thirdName = secondName;
 
-			text("You got the top score!", width/2, height/3);
-			text("Enter your name", width/2, height/2);
-			text(currentString + ": "+player1.orbits,width/2,(height/3)*2);
-			startedTyping = true;
-			if(startedTyping == false || key == ENTER){ //finished typing
-				topName = currentString;
-				gameover = false;
-				reset();
-				meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
+				secondScore = topScore;
+				secondName = topName;
+
+				topScore = player1.orbits;
+				scoreChanged = true; //the scores have been changed
 			}
-    } else {
+
+			text("You got the top score!", width/2, height/6);
+
+			text(currentString + ": " + topScore, width/2, (height/6)*3.5);
+			text(secondName + ": " + secondScore, width/2, (height/6)*4);
+			text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5);
+			startedTyping = true;
+			if(startedTyping == false || keyPressed && key == ENTER){ //finished typing
+				topName = currentString;
+				reset();
+			}
+    } else if (player1.orbits >= secondScore) { // you got the second  highest score
+			if(!scoreChanged){
+				thirdScore = secondScore; //moves the other scores down to the top score is now the second one
+				thirdName = secondName;
+
+				secondScore = player1.orbits;
+				scoreChanged = true;
+			}
+
+			text("You got the second top score!", width/2, height/6);
+
+			text(topName + ": " + topScore, width/2, (height/6)*3.5);
+			text(currentString + ": " + player1.orbits, width/2, (height/6)*4);
+			text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5);
+			startedTyping = true;
+			if(startedTyping == false || keyPressed && key == ENTER){ //finished typing
+				secondName = currentString;
+				reset();
+			}
+		} else if (player1.orbits >= thirdScore) { // you got the second  highest score
+			if(!scoreChanged){
+	      thirdScore = player1.orbits;
+				scoreChanged = true;
+			}
+
+			text("You got the third top score!", width/2, height/6);
+
+			text(topName + ": " + topScore, width/2, (height/6)*3.5);
+			text(secondName + ": " + secondScore, width/2, (height/6)*4);
+			text(currentString+ ": " + player1.orbits, width/2, (height/6)*4.5);
+			startedTyping = true;
+			if(startedTyping == false || keyPressed && key == ENTER){ //finished typing
+				thirdName = currentString;
+				reset();
+			}
+		} else { // you didnt get a top score
 			textAlign(CENTER, TOP);
 			textSize(40);
-    	text("Gameover!", width/2, height/3);
-    	text("Score: "+player1.orbits, width/2, height/2);
-    	text("Highscore: " + topScore, width/2, (height/3)*2); //replace showing the top 3
+    	text("Gameover!", width/2, height/6);
+    	text("Score: "+player1.orbits, width/2, (height/6)*2);
+    	text(topName + ": " + topScore, width/2, (height/6)*3.5);
+    	text(secondName + ": " + secondScore, width/2, (height/6)*4);
+    	text(thirdName + ": " + thirdScore, width/2, (height/6)*4.5);
 			if (keyPressed) {
-				gameover = false;
 				reset();
-				meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
 			}
 		}
 
@@ -215,6 +264,10 @@ void checkGameover() {
 void reset() {
   player1 = new player();
 	startedTyping = false;
+	currentString = "enter your name";
+	gameover = false;
+	scoreChanged = false;
+
 	for (int i = meteorList.size() - 1; i >= 0; i--) {
 		meteorList.remove(i);
 	}
@@ -222,6 +275,8 @@ void reset() {
 	for (int i = itemList.size() - 1; i >= 0; i--) {
 		itemList.remove(i);
 	}
+
+	meteorList.add(new meteor((int)random(1,5),(int)random(10,20),(int)random(5,10)));
 }
 
 void debugMode(){
