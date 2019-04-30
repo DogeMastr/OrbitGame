@@ -8,3 +8,7 @@ You get points by getting a near miss with an asteroid and finishing one full *o
 To run the game (as im not finished with it yet) you would need to have the <a href =https://processing.org/download>processing IDE that you can download here<a> you can download the master and just open it up with that 
   
   ***It should work***
+
+Stuff I know dosen't work:
+ - Highscores with names
+ 
